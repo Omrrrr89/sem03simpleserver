@@ -2,10 +2,14 @@ package main
 
 import (
 	"io"
+"strconv"
+"fmt"
 	"log"
 	"net"
 	"sync"
+        "strings"
 "github.com/Omrrrr89/is105sem03/mycrypt"
+"funtemps/conv"
 )
 
 func main() {
@@ -37,12 +41,25 @@ func main() {
 						}
 						return // fra for løkke
 					}
-dekryptertMelding := mycrypt.Krypter([]rune(string(buf[:n]))), mycrypt.ALF_SEM03, len(mycrypt.ALF_SEM03)-4)
+dekryptertMelding := mycrypt.Krypter([]rune(string(buf[:n])), mycrypt.ALF_SEM03, len(mycrypt.ALF_SEM03)-4)
 log.Println("Dekrypter melding: ", string(dekryptertMelding))
-
-					switch msg := string(dekrypterMelding)  {
+msg := string(dekryptertMelding)  
+				switch msg  {
   				        case "ping":
-						_, err = c.Write([]byte("pong"))
+                                         _, err = c.Write([]byte("pong"))
+                                        case" kjevik":
+parts := strings.Split(msg, ";")
+                                    if len(parts) < 4 {
+                                  log.Println("Invalid input message")
+                                       return     }
+                     t, err := strconv.ParseFloat(strings.TrimSpace(parts[3]), 64)
+                     if err != nil {
+                     log.Println(err) }
+                     f := conv.CelsiusToFahrenheit(t)
+
+                      response := fmt.Sprintf("%.2f Celsius er %.2f Fahrenheit", t, f)
+                           _, err = c.Write([]byte(response))
+
 					default:
 						_, err = c.Write(buf[:n])
 					}
