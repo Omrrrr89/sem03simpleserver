@@ -47,7 +47,7 @@ msg := string(dekryptertMelding)
 				switch msg  {
   				        case "ping":
                                          _, err = c.Write([]byte("pong"))
-                                        case" kjevik":
+                                        case"Kjevik;SN39040;18.03.2022 01:50;6":
 parts := strings.Split(msg, ";")
                                     if len(parts) < 4 {
                                   log.Println("Invalid input message")
@@ -56,8 +56,7 @@ parts := strings.Split(msg, ";")
                      if err != nil {
                      log.Println(err) }
                      f := conv.CelsiusToFahrenheit(t)
-
-                      response := fmt.Sprintf("%.2f Celsius er %.2f Fahrenheit", t, f)
+ response := fmt.Sprintf("Kjevik;SN39040;18.03.2022 01:50;%0.2f",f)
                            _, err = c.Write([]byte(response))
 
 					default:
